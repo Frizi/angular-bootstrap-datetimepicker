@@ -21,14 +21,14 @@ angular.module('ui.bootstrap.datetimepicker', [])
     dropdownSelector: null
   })
   .constant('dateTimePickerConfigValidation', function (configuration) {
-    "use strict";
+    'use strict';
 
     var validOptions = ['startView', 'minView', 'minuteStep', 'dropdownSelector'];
 
     for (var prop in configuration) {
       if (configuration.hasOwnProperty(prop)) {
         if (validOptions.indexOf(prop) < 0) {
-          throw ("invalid option: " + prop);
+          throw ('invalid option: ' + prop);
         }
       }
     }
@@ -37,72 +37,74 @@ angular.module('ui.bootstrap.datetimepicker', [])
     var validViews = ['minute', 'hour', 'day', 'month', 'year'];
 
     if (validViews.indexOf(configuration.startView) < 0) {
-      throw ("invalid startView value: " + configuration.startView);
+      throw ('invalid startView value: ' + configuration.startView);
     }
 
     if (validViews.indexOf(configuration.minView) < 0) {
-      throw ("invalid minView value: " + configuration.minView);
+      throw ('invalid minView value: ' + configuration.minView);
     }
 
     if (validViews.indexOf(configuration.minView) > validViews.indexOf(configuration.startView)) {
-      throw ("startView must be greater than minView");
+      throw ('startView must be greater than minView');
     }
 
     if (!angular.isNumber(configuration.minuteStep)) {
-      throw ("minuteStep must be numeric");
+      throw ('minuteStep must be numeric');
     }
     if (configuration.minuteStep <= 0 || configuration.minuteStep >= 60) {
-      throw ("minuteStep must be greater than zero and less than 60");
+      throw ('minuteStep must be greater than zero and less than 60');
     }
     if (configuration.dropdownSelector !== null && !angular.isString(configuration.dropdownSelector)) {
-      throw ("dropdownSelector must be a string");
+      throw ('dropdownSelector must be a string');
     }
   }
 )
   .directive('datetimepicker', ['dateTimePickerConfig', 'dateTimePickerConfigValidation', function (defaultConfig, validateConfigurationFunction) {
-    "use strict";
+    'use strict';
 
     return {
       restrict: 'E',
       require: 'ngModel',
-      template: "<div class='datetimepicker'>" +
-        "<table class='table-condensed'>" +
-        "   <thead>" +
-        "       <tr>" +
-        "           <th class='left'" +
-        "               data-ng-click=\"changeView(data.currentView, data.leftDate, $event)\"" +
-        "               ><i class='fa fa-arrow-left'/></th>" +
-        "           <th class='switch' colspan='5'" +
-        "               data-ng-click=\"changeView(data.previousView, data.currentDate, $event)\"" +
-        ">{{ data.title }}</th>" +
-        "           <th class='right'" +
-        "               data-ng-click=\"changeView(data.currentView, data.rightDate, $event)\"" +
-        "             ><i class='fa fa-arrow-right'/></th>" +
-        "       </tr>" +
-        "       <tr>" +
-        "           <th class='dow' data-ng-repeat='day in data.dayNames' >{{ day }}</th>" +
-        "       </tr>" +
-        "   </thead>" +
-        "   <tbody>" +
-        '       <tr data-ng-class=\'{ hide: data.currentView == "day" }\' >' +
-        "           <td colspan='7' >" +
-        "              <span    class='{{ data.currentView }}' " +
-        "                       data-ng-repeat='dateValue in data.dates'  " +
-        "                       data-ng-class='{active: dateValue.active, past: dateValue.past, future: dateValue.future}' " +
-        "                       data-ng-click=\"changeView(data.nextView, dateValue.date, $event)\">{{ dateValue.display }}</span> " +
-        "           </td>" +
-        "       </tr>" +
-        '       <tr data-ng-show=\'data.currentView == "day"\' data-ng-repeat=\'week in data.weeks\'>' +
-        "           <td data-ng-repeat='dateValue in week.dates' " +
-        "               data-ng-click=\"changeView(data.nextView, dateValue.date, $event)\"" +
-        "               class='day' " +
-        "               data-ng-class='{active: dateValue.active, past: dateValue.past, future: dateValue.future}' >{{ dateValue.display }}</td>" +
-        "       </tr>" +
-        "   </tbody>" +
-        "</table></div>",
+      template: '<div class="datetimepicker">' +
+        '<table class="table-condensed">' +
+        '   <thead>' +
+        '       <tr>' +
+        '           <th colspan="7">' +
+        '           <div class="left"' +
+        '               data-ng-click="changeView(data.currentView, data.leftDate, $event)"' +
+        '               ><i class="fa fa-arrow-left"/></div>' +
+        '           <div class="right"' +
+        '               data-ng-click="changeView(data.currentView, data.rightDate, $event)"' +
+        '             ><i class="fa fa-arrow-right"/></div>' +
+        '           <div class="switch"' +
+        '               data-ng-click="changeView(data.previousView, data.currentDate, $event)"' +
+        '>{{ data.title }}</div>' +
+        '           </th>' +
+        '       </tr>' +
+        '       <tr>' +
+        '           <th class="dow" data-ng-repeat="day in data.dayNames" >{{ day }}</th>' +
+        '       </tr>' +
+        '   </thead>' +
+        '   <tbody>' +
+        '       <tr data-ng-hide="data.currentView == \'day\'" >' +
+        '           <td colspan="7" >' +
+        '              <span    class="{{ data.currentView }}" ' +
+        '                       data-ng-repeat="dateValue in data.dates"  ' +
+        '                       data-ng-class="{active: dateValue.active, past: dateValue.past, future: dateValue.future}" ' +
+        '                       data-ng-click="changeView(data.nextView, dateValue.date, $event)">{{ dateValue.display }}</span> ' +
+        '           </td>' +
+        '       </tr>' +
+        '       <tr data-ng-show="data.currentView == \'day\'" data-ng-repeat="week in data.weeks">' +
+        '           <td data-ng-repeat="dateValue in week.dates" ' +
+        '               data-ng-click="changeView(data.nextView, dateValue.date, $event)"' +
+        '               class="day" ' +
+        '               data-ng-class="{active: dateValue.active, past: dateValue.past, future: dateValue.future}">{{ dateValue.display }}</td>' +
+        '       </tr>' +
+        '   </tbody>' +
+        '</table></div>',
       scope: {
-        ngModel: "=",
-        onSetTime: "="
+        ngModel: '=',
+        onSetTime: '='
       },
       replace: true,
       link: function (scope, element, attrs) {
