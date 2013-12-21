@@ -12,8 +12,8 @@
   border-radius: 4px;
   direction: ltr;
   /*.dow {
-		border-top: 1px solid #ddd !important;
-	}*/
+    border-top: 1px solid #ddd !important;
+  }*/
 
 }
 .datetimepicker-inline {
@@ -345,12 +345,26 @@
 .datetimepicker table tr td span.future {
   color: #999999;
 }
-.datetimepicker th.switch {
-  width: 145px;
+
+.datetimepicker table {
+  width: 100%;
 }
+
+.datetimepicker .left, .datetimepicker .right, .datetimepicker .switch {
+  padding: 7px;
+} 
+
+.datetimepicker div.left {
+  float: left;
+}
+.datetimepicker div.right {
+  float: right;
+}
+
 .datetimepicker thead tr:first-child th,
 .datetimepicker tfoot tr:first-child th {
   cursor: pointer;
+  padding: 0;
 }
 .datetimepicker thead tr:first-child th:hover,
 .datetimepicker tfoot tr:first-child th:hover {
